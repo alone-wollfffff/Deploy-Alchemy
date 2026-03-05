@@ -31,6 +31,6 @@ jobs:
           # Push this repo to your HuggingFace Space
           # Replace YOUR_HF_USERNAME and YOUR_SPACE_NAME below
           git push \
-            https://lonewollff:${HF_TOKEN}@huggingface.co/spaces/lonewollff/Deploy_Alchemy \
+            https://huggingface.co/spaces/lonewollff/Deploy_Alchemy \
             main:main \
             --force
