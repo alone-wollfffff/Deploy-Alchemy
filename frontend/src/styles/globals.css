@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --void: #050810;
+  --deep: #080d1a;
+  --surface: #0d1628;
+  --card: #111d35;
+  --border: #1a2d50;
+  --glow: #00f5ff;
+  --arcane: #7c3aed;
+  --ember: #f97316;
+  --gold: #f59e0b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; width: 100%; }
+
+body {
+  background: var(--void);
+  color: #e2e8f0;
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2d4a7a; }
+
+/* ── Particle canvas stays BEHIND everything ─────── */
+#particle-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── GLASS — transparent so particles show through ── */
+.glass {
+  background: rgba(11, 18, 38, 0.45);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(26, 45, 80, 0.55);
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+}
+
+/* ── HOVER GLOW — applied universally ────────────── */
+.glass:hover {
+  background: rgba(14, 22, 46, 0.55);
+  border-color: rgba(0, 245, 255, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(0, 245, 255, 0.08),
+    0 0 24px rgba(0, 245, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Cards that use bg-card or bg-surface — make them see-through */
+.bg-card   { background: rgba(17, 29, 53, 0.4) !important; }
+.bg-surface { background: rgba(13, 22, 40, 0.4) !important; }
+.bg-deep   { background: rgba(8, 13, 26, 0.5) !important; }
+
+/* ── Glow colour variants ─────────────────────────── */
+.glow-cyan   { box-shadow: 0 0 30px rgba(0,245,255,0.25), inset 0 0 30px rgba(0,245,255,0.05); }
+.glow-purple { box-shadow: 0 0 30px rgba(124,58,237,0.3), inset 0 0 20px rgba(124,58,237,0.05); }
+.glow-ember  { box-shadow: 0 0 30px rgba(249,115,22,0.3); }
+.text-glow      { text-shadow: 0 0 40px rgba(0,245,255,0.5); }
+.text-glow-gold { text-shadow: 0 0 30px rgba(245,158,11,0.6); }
+
+/* ── Interactive card / widget hover glow ─────────── */
+/* Buttons */
+button:not([disabled]):hover,
+.hover-glow:hover {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Any rounded card that is NOT a button */
+.glow-card {
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.25s ease;
+}
+.glow-card:hover {
+  border-color: rgba(0, 245, 255, 0.28) !important;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.12), 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+.glow-card-purple:hover {
+  border-color: rgba(124, 58, 237, 0.35) !important;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15), 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+
+/* Sidebar */
+aside {
+  background: rgba(8, 13, 26, 0.55) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Shimmer ──────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(0,245,255,0.05) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ── Scan entrance ────────────────────────────────── */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+.scan-line {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--glow), transparent);
+  animation: scanline 3s ease-in-out;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ── Upload progress animation ────────────────────── */
+@keyframes uploadPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,245,255,0.3); }
+  50%       { box-shadow: 0 0 50px rgba(0,245,255,0.7), 0 0 80px rgba(124,58,237,0.3); }
+}
+.upload-active { animation: uploadPulse 1.2s ease-in-out infinite; }
+
+/* ── Dashboard entrance ───────────────────────────── */
+@keyframes dashboardEntrance {
+  0%   { opacity: 0; transform: translateY(24px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dashboard-entrance {
+  animation: dashboardEntrance 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+/* ── Misc animations ──────────────────────────────── */
+@keyframes scan {
+  0%   { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes resultEntrance {
+  0%   { opacity: 0; transform: scale(0.8) translateY(20px); }
+  70%  { transform: scale(1.05) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.result-entrance {
+  animation: resultEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes fadeUp {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+
+/* Number inputs */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { opacity: 0.3; }
+
+/* Toggle switch */
+.toggle-switch { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.toggle-switch input { display: none; }
+.toggle-track {
+  width: 44px; height: 24px;
+  background: #1a2d50; border-radius: 12px;
+  border: 1px solid #2d4a7a; transition: all 0.3s; position: relative;
+}
+.toggle-track::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px; width: 16px; height: 16px;
+  background: #4a6a9a; border-radius: 50%; transition: all 0.3s;
+}
+input:checked + .toggle-track { background: rgba(0,245,255,0.15); border-color: var(--glow); }
+input:checked + .toggle-track::after {
+  transform: translateX(20px); background: var(--glow);
+  box-shadow: 0 0 10px rgba(0,245,255,0.5);
+}
+
+/* Gauge */
+.gauge-arc {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Recharts */
+.recharts-tooltip-wrapper { z-index: 100; }
+.recharts-default-tooltip {
+  background: rgba(17,29,53,0.9) !important;
+  border: 1px solid #1a2d50 !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Rank badges */
+.rank-gold   { color: #f59e0b; }
+.rank-silver { color: #94a3b8; }
+.rank-bronze { color: #b45309; }
+
+/* Deploy card hover */
+.deploy-card { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.deploy-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,245,255,0.3) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+/* Tab active */
+.tab-active { border-bottom: 2px solid var(--glow); color: var(--glow); }

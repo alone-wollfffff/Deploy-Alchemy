@@ -1,0 +1,29 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/build/
+.next/
+
+# Runtime temp files (sessions/uploads)
+/tmp/
+*.tmp
+/temp_sessions/
+
+# Secrets
+.env
+.env.local
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
