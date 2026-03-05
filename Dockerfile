@@ -4,11 +4,11 @@
 # ════════════════════════════════════════════════════════════════════
 
 # ── Stage 1: Build React frontend ────────────────────────────────────
-FROM node:20-slim AS frontend-builder
+FROM node:18-slim AS frontend-builder
 
 WORKDIR /build
 COPY frontend/package*.json ./
-RUN npm ci --silent
+RUN npm install --legacy-peer-deps --silent
 COPY frontend/ ./
 RUN npm run build
 # Output goes to /build/dist/
