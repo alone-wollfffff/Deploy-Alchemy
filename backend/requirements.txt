@@ -1,8 +1,0 @@
-fastapi
-uvicorn[standard]
-python-multipart
-pandas
-numpy
-scikit-learn
-autofeat
-autogluon.tabular[all]
