@@ -1,14 +1,9 @@
-# ════════════════════════════════════════════════════════════════════
-#  Auto-deploy to HuggingFace Spaces on every push to main
-#  Every git push → this runs → HuggingFace rebuilds automatically
-# ════════════════════════════════════════════════════════════════════
-
 name: Deploy to HuggingFace Spaces
 
 on:
   push:
     branches:
-      - main          # triggers on every push to main
+      - main
 
 jobs:
   deploy:
@@ -17,7 +12,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0          # full history needed for HF sync
+          fetch-depth: 0
           lfs: true
 
       - name: Push to HuggingFace Space
@@ -28,9 +23,8 @@ jobs:
           git config user.email "deploy-bot@github.com"
           git config user.name  "Deploy Bot"
 
-          # Push this repo to your HuggingFace Space
-          # Replace YOUR_HF_USERNAME and YOUR_SPACE_NAME below
-          git push \
-            https://huggingface.co/spaces/lonewollff/Deploy_Alchemy \
-            main:main \
-            --force
+          # Set remote with token authentication
+          git remote add space https://lonewollff:${HF_TOKEN}@huggingface.co/spaces/lonewollff/Deploy_Alchemy
+
+          # Push to HuggingFace Space
+          git push space main:main --force
